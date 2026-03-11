@@ -509,9 +509,9 @@ export default function UnitDashboard() {
                             initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.95, opacity: 0 }}
-                            className="w-full max-w-lg"
+                            className="w-full max-w-2xl"
                         >
-                            <Card className="border-0 shadow-2xl bg-white rounded-2xl overflow-hidden min-h-[500px] max-h-[90vh] flex flex-col">
+                            <Card className="border-0 shadow-2xl bg-white rounded-2xl overflow-hidden max-h-[92vh] flex flex-col">
                                 <div className="bg-gradient-to-r from-orange-50 to-orange-100/50 p-6 border-b border-orange-100 shrink-0">
                                     <CardTitle className="text-orange-800 text-xl font-bold">
                                         {modalStep === 1 ? 'Create New Ticket' : 'Add More Details'}
@@ -520,7 +520,7 @@ export default function UnitDashboard() {
                                         {modalStep === 1 ? 'Submit a new issue for the team to resolve.' : 'Provide specific attributes and upload relevant documents.'}
                                     </CardDescription>
                                 </div>
-                                <CardContent className="p-6 flex-1 overflow-y-auto">
+                                <CardContent className="p-0 flex-1 overflow-hidden flex flex-col">
                                     <form onSubmit={(e) => {
                                         e.preventDefault();
                                         if (modalStep === 1 && addMoreDetails) {
@@ -532,10 +532,10 @@ export default function UnitDashboard() {
                                         } else {
                                             handleCreateTicket(e);
                                         }
-                                    }} className="space-y-5 h-full flex flex-col">
+                                    }} className="flex flex-col flex-1 overflow-hidden">
 
                                         {modalStep === 1 && (
-                                            <div className="space-y-5 flex-1">
+                                            <div className="space-y-6 flex-1 overflow-y-auto px-6 py-5">
                                                 <div className="space-y-2">
                                                     <label className="text-sm font-semibold text-slate-700">Title</label>
                                                     <Input
@@ -547,7 +547,7 @@ export default function UnitDashboard() {
                                                     />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label className="text-sm font-semibold text-slate-700">Description</label>
+                                                    <label className="text-sm font-semibold text-slate-700">Description <span className="text-slate-400 font-normal">(required)</span></label>
                                                     <textarea
                                                         className="w-full min-h-[120px] rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/20 focus-visible:border-orange-500 resize-none"
                                                         placeholder="Please provide detailed information about the issue..."
@@ -645,7 +645,7 @@ export default function UnitDashboard() {
 
                                         {/* ── Step 2: Extra Details & Attachments ── */}
                                         {modalStep === 2 && (
-                                            <div className="space-y-6 flex-1">
+                                            <div className="space-y-6 flex-1 overflow-y-auto px-6 py-5">
 
                                                 <div className="space-y-4">
                                                     <div className="flex items-center justify-between">
@@ -705,7 +705,7 @@ export default function UnitDashboard() {
                                             </div>
                                         )}
 
-                                        <div className="flex justify-between items-center pt-4 border-t border-slate-100 mt-auto shrink-0">
+                                        <div className="flex justify-between items-center px-6 py-4 border-t border-slate-100 shrink-0 bg-white">
                                             {modalStep === 2 ? (
                                                 <Button type="button" variant="ghost" onClick={() => setModalStep(1)} className="text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                                                     Back

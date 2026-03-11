@@ -1,6 +1,14 @@
 @import "tailwindcss";
 
 @theme {
+  /* ── Base font scale: 20px root = renders as 16px at 80% browser zoom ── */
+  --text-xs: 0.8125rem;
+  /* 13px  (was 12px) */
+  --text-sm: 0.9375rem;
+  /* 15px  (was 14px) */
+  --text-base: 1.0625rem;
+  /* 17px  (was 16px) */
+
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -95,7 +103,8 @@
     /* Green */
     --secondary-foreground: 210 40% 98%;
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 215.4 16.3% 36%;
+    /* darkened for readability */
     --accent: 230 60% 30%;
     /* Chakra Blue */
     --accent-foreground: 222.2 47.4% 11.2%;
@@ -133,6 +142,11 @@
 }
 
 @layer base {
+  html {
+    font-size: 20px;
+    /* 20px ÷ 0.8 zoom = 16px effective — looks normal at 80% zoom */
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
@@ -140,4 +154,34 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ── Remap hardcoded tiny px font sizes to rem so they scale with root ── */
+/* Without this, text-[9px/10px/11px/12px] ignore the 20px root entirely  */
+@layer utilities {
+  .text-\[9px\] {
+    font-size: 0.65rem !important;
+  }
+
+  /* ~13px at 20px root */
+  .text-\[10px\] {
+    font-size: 0.7rem !important;
+  }
+
+  /* ~14px at 20px root */
+  .text-\[11px\] {
+    font-size: 0.75rem !important;
+  }
+
+  /* 15px at 20px root  */
+  .text-\[12px\] {
+    font-size: 0.8rem !important;
+  }
+
+  /* 16px at 20px root  */
+  .text-\[13px\] {
+    font-size: 0.85rem !important;
+  }
+
+  /* 17px at 20px root  */
 }
