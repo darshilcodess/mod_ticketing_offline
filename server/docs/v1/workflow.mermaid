@@ -1,0 +1,65 @@
+sequenceDiagram
+    autonumber
+
+    actor UR as Unit Representative
+    actor G1 as G1 / Admin
+    actor TM as Team Member
+    participant SYS as System (Backend + DB)
+
+    %% ── Phase 1: Ticket Creation ──────────────────────────────
+    Note over UR,SYS: Phase 1 — Ticket Creation
+
+    UR->>SYS: POST /tickets/  (title, description, priority)
+    SYS-->>SYS: Set status = OPEN, append history[CREATED]
+    SYS-->>G1:  🔔 Notification: "New ticket created"
+    SYS-->>UR:  Ticket object (status: OPEN)
+
+    %% ── Phase 2: Triage & Allocation ────────────────────────
+    Note over G1,SYS: Phase 2 — Triage & Allocation
+
+    G1->>SYS: GET /tickets/  (view OPEN tickets)
+    SYS-->>G1: List of OPEN tickets
+    G1->>SYS: PATCH /tickets/{id}/allocate  (team_id, priority?)
+    SYS-->>SYS: Set status = ALLOCATED, append history[ALLOCATED]
+    SYS-->>TM:  🔔 Notification: "Ticket allocated to your team"
+    SYS-->>UR:  🔔 Notification: "Your ticket has been allocated"
+    SYS-->>G1:  Ticket object (status: ALLOCATED)
+
+    %% ── Phase 3: Resolution ──────────────────────────────────
+    Note over TM,SYS: Phase 3 — Resolution (Team)
+
+    TM->>SYS: GET /tickets/  (view ALLOCATED tickets for own team)
+    SYS-->>TM: List of ALLOCATED tickets
+    TM->>SYS: PATCH /tickets/{id}/resolve  (resolution_notes)
+    SYS-->>SYS: Set status = RESOLVED, append history[MARKED_FOR_REVIEW]
+    SYS-->>G1:  🔔 Notification: "Ticket marked for review"
+    SYS-->>UR:  🔔 Notification: "Ticket marked for review – please verify"
+    SYS-->>TM:  Ticket object (status: RESOLVED)
+
+    %% ── Phase 4: Unit Verification ───────────────────────────
+    Note over UR,SYS: Phase 4 — Unit Verification
+
+    UR->>SYS: GET /tickets/  (view RESOLVED tickets)
+    SYS-->>UR: List of RESOLVED tickets (shown as "Pending Review")
+
+    alt ✅ Resolution Accepted
+        UR->>SYS: PATCH /tickets/{id}/close
+        SYS-->>SYS: Set status = CLOSED, append history[APPROVED_AND_CLOSED]
+        SYS-->>TM:  🔔 Notification: "Resolution approved"
+        SYS-->>UR:  Ticket object (status: CLOSED)
+
+    else ↩ Rejected — Retry by Same Team
+        UR->>SYS: PATCH /tickets/{id}/reallocate-to-team
+        SYS-->>SYS: Set status = ALLOCATED, append history[REALLOCATED_TO_SAME_TEAM]
+        SYS-->>TM:  🔔 Notification: "Please retry resolution"
+        SYS-->>UR:  Ticket object (status: ALLOCATED)
+        Note over TM,SYS: Team reattempts Phase 3
+
+    else ⬆ Rejected — Escalate to G1
+        UR->>SYS: PATCH /tickets/{id}/reallocate-to-g1
+        SYS-->>SYS: Set status = OPEN, clear team, append history[REALLOCATED_TO_G1]
+        SYS-->>G1:  🔔 Notification: "Ticket returned — needs reassignment"
+        SYS-->>TM:  🔔 Notification: "Resolution rejected by unit"
+        SYS-->>UR:  Ticket object (status: OPEN)
+        Note over G1,SYS: G1 reassigns to a different team (Phase 2)
+    end

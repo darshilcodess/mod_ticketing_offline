@@ -1,0 +1,68 @@
+erDiagram
+
+    %% =========================
+    %% Core Entities
+    %% =========================
+
+    USER {
+        int     id              PK
+        string  email           "Unique"
+        string  hashed_password
+        string  full_name
+        string  role            "UNIT | G1 | TEAM | ADMIN"
+        bool    is_active
+        int     team_id         FK "Nullable → TEAM"
+    }
+
+    TEAM {
+        int     id          PK
+        string  name        "Unique"
+        string  description
+    }
+
+    TICKET {
+        int      id               PK
+        string   title
+        text     description
+        string   status           "OPEN | ALLOCATED | RESOLVED | CLOSED"
+        string   priority         "LOW | MEDIUM | HIGH | CRITICAL"
+        int      created_by_id    FK "→ USER"
+        int      assigned_team_id FK "Nullable → TEAM"
+        int      resolved_by_id   FK "Nullable → USER"
+        text     resolution_notes "Nullable"
+        json     history          "Audit trail of all status changes"
+        datetime created_at
+        datetime updated_at
+    }
+
+    COMMENT {
+        int      id         PK
+        text     content
+        int      ticket_id  FK "→ TICKET"
+        int      user_id    FK "→ USER"
+        datetime created_at
+    }
+
+    NOTIFICATION {
+        int      id            PK
+        string   message
+        bool     is_read       "Default: false"
+        int      recipient_id  FK "→ USER"
+        int      ticket_id     FK "Nullable → TICKET"
+        datetime created_at
+    }
+
+    %% =========================
+    %% Relationships
+    %% =========================
+
+    TEAM       ||--o{ USER         : "has members"
+    TEAM       ||--o{ TICKET       : "is assigned"
+
+    USER       ||--o{ TICKET       : "creates"
+    USER       ||--o{ TICKET       : "resolves"
+    USER       ||--o{ COMMENT      : "writes"
+    USER       ||--o{ NOTIFICATION : "receives"
+
+    TICKET     ||--o{ COMMENT      : "has"
+    TICKET     ||--o{ NOTIFICATION : "triggers"

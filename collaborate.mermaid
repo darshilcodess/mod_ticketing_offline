@@ -1,0 +1,42 @@
+    ---
+config:
+  theme: dark
+  look: neo
+---
+flowchart LR
+    MAIN[(main / production)]
+    subgraph devA["devA: Feature Developer"]
+        A1[git checkout main]
+        A2[git pull --rebase]
+        A3[git checkout -b feature/login-form]
+        A4[dev makes changes]
+        A5[git commit -m 'Add login form UI']
+        A6[dev makes changes]
+        A7[git commit -m 'Wire login form to API']
+        A8[git push origin feature/login-form]
+        A9[git checkout main]
+        A10[git pull --rebase]
+        A11[git checkout feature/login-form]
+        A12[git rebase main]
+    end
+    subgraph devB["devB: Parallel Developer"]
+        B1[git checkout main]
+        B2[git pull --rebase]
+        B3[git checkout -b feature/auth-validation]
+        B4[dev makes changes]
+        B5[git commit -m 'Add auth validation']
+        B6[git push origin feature/auth-validation]
+        B7[git checkout main]
+        B8[git pull --rebase]
+        B9[git checkout feature/auth-validation]
+        B10[git rebase main]
+    end
+    M1[git checkout main]
+    M2[git merge feature/login-form]
+    M3[git merge feature/auth-validation]
+    MAIN --> A1 --> A2 --> A3 --> A4 --> A5 --> A6 --> A7 --> A8 --> A9 --> A10 --> A11 --> A12
+    MAIN --> B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7 --> B8 --> B9 --> B10
+
+    A12 --> M1
+    B10 --> M1
+    M1 --> M2 --> M3 --> MAIN

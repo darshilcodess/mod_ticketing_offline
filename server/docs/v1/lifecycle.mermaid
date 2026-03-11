@@ -1,0 +1,79 @@
+flowchart TD
+
+    %% ── Actors ────────────────────────────────────────────
+    subgraph UNIT ["🏢 Unit Representative"]
+        U1([Create Ticket])
+        U2([View Pending Review])
+        U3{Verify Resolution?}
+        U4([Approve & Close])
+        U5([Reallocate to Same Team])
+        U6([Reallocate to G1])
+    end
+
+    subgraph G1_BOX ["🛡️ G1 / Admin"]
+        G1([View Open Tickets])
+        G2([Allocate to Team])
+    end
+
+    subgraph TEAM_BOX ["🔧 Team Member"]
+        T1([View Allocated Tickets])
+        T2([Work on Issue])
+        T3([Add Resolution Notes])
+        T4([Mark for Review])
+    end
+
+    %% ── Database / System ─────────────────────────────────
+    subgraph SYS ["⚙️ System"]
+        S_OPEN(["Status: OPEN\n📋 history: CREATED"])
+        S_ALLOC(["Status: ALLOCATED\n📋 history: ALLOCATED"])
+        S_REVIEW(["Status: RESOLVED\n📋 history: MARKED_FOR_REVIEW"])
+        S_CLOSED(["Status: CLOSED\n📋 history: APPROVED_AND_CLOSED"])
+        S_BACK_TEAM(["Status: ALLOCATED\n📋 history: REALLOCATED_TO_SAME_TEAM"])
+        S_BACK_G1(["Status: OPEN\n📋 history: REALLOCATED_TO_G1"])
+    end
+
+    %% ── Phase 1: Creation ─────────────────────────────────
+    START([🚀 Start]) --> U1
+    U1 --> S_OPEN
+    S_OPEN --> G1
+
+    %% ── Phase 2: Allocation ───────────────────────────────
+    G1 --> G2
+    G2 --> S_ALLOC
+    S_ALLOC --> T1
+
+    %% ── Phase 3: Resolution ───────────────────────────────
+    T1 --> T2
+    T2 --> T3
+    T3 --> T4
+    T4 --> S_REVIEW
+    S_REVIEW --> U2
+
+    %% ── Phase 4: Verification flows ───────────────────────
+    U2 --> U3
+
+    U3 -- "✅ Accept" --> U4
+    U4 --> S_CLOSED --> DONE([🏁 Closed])
+
+    U3 -- "↩ Retry\n(same team)" --> U5
+    U5 --> S_BACK_TEAM
+    S_BACK_TEAM --> T1
+
+    U3 -- "⬆ Escalate\n(new team)" --> U6
+    U6 --> S_BACK_G1
+    S_BACK_G1 --> G1
+
+    %% ── Styling ───────────────────────────────────────────
+    classDef status  fill:#f8fafc,stroke:#94a3b8,color:#1e293b
+    classDef accept  fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef review  fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef realloc fill:#fff7ed,stroke:#ea580c,color:#7c2d12
+    classDef closed  fill:#d1fae5,stroke:#059669,color:#064e3b
+    classDef actor   fill:#eff6ff,stroke:#3b82f6,color:#1e3a8a
+    classDef edge    fill:#fafafa,stroke:#cbd5e1
+
+    class S_ALLOC,S_OPEN status
+    class S_REVIEW review
+    class U4,S_CLOSED,DONE accept
+    class U5,S_BACK_TEAM,U6,S_BACK_G1 realloc
+    class U1,U2,U3,U4,U5,U6,G1,G2,T1,T2,T3,T4 actor

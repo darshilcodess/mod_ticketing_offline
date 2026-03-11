@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .header-table td {
+            border: none;
+            padding: 3px 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        .center-heading {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 6px;
+        }
+
+        .small-para {
+            text-align: justify;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        hr {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>RECEIPT, ISSUE AND EXPENSE VOUCHER</h2>
+
+    <!-- HEADER -->
+    <table class="header-table">
+        <tr>
+            <td><b>IV NO.:</b> {{ iv_no }}</td>
+            <td><b>RV NO.:</b> {{ rv_no }}</td>
+        </tr>
+        <tr>
+            <td><b>DATE:</b> {{ date_iv }}</td>
+            <td><b>DATE:</b> {{ date_rv }}</td>
+        </tr>
+        <tr>
+            <td><b>UNIT:</b> {{ unit_iv }}</td>
+            <td><b>UNIT:</b> {{ unit_rv }}</td>
+        </tr>
+        <tr>
+            <td><b>STN:</b> {{ stn_iv }}</td>
+            <td><b>STN:</b> {{ stn_rv }}</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <!-- CENTER HEADING -->
+    <div class="center-heading">
+        {{ center_heading }}
+    </div>
+
+    <!-- PARAGRAPH -->
+    <div class="small-para">
+        {{ paragraph_text }}
+    </div>
+
+    <!-- ITEMS TABLE -->
+    <table>
+        <tr>
+            <th style="width:10%">S.No</th>
+            <th style="width:25%">Cat Part No.</th>
+            <th style="width:30%">Nomenclature</th>
+            <th style="width:10%">AU</th>
+            <th style="width:10%">Qty</th>
+            <th style="width:15%">Remarks</th>
+        </tr>
+
+        {% for item in items %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ item.part_no }}</td>
+            <td>{{ item.nomenclature }}</td>
+            <td>{{ item.au }}</td>
+            <td>{{ item.qty }}</td>
+            <td>{{ item.remarks }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p>(Total items {{ items|length }} only)</p>
+
+    <p>Please sign and return one copy to this unit duly receipted</p>
+
+    <!-- SIGNATURE TABLE -->
+    <table>
+        <tr>
+            <th style="width:25%">Issued_by</th>
+            <th style="width:25%">Handed_over_by</th>
+            <th style="width:25%">Taken_over_by</th>
+            <th style="width:25%">Received_by</th>
+        </tr>
+        <tr>
+            <td>{{ issued_by }}</td>
+            <td>{{ handed_over }}</td>
+            <td>{{ taken_over }}</td>
+            <td>{{ received_by }}</td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

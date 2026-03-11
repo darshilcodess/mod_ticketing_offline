@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .header-table td {
+            border: none;
+            padding: 4px 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        .section-text {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        hr {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>RECEIPT, ISSUE AND EXPENSE VOUCHER</h2>
+
+    <!-- HEADER -->
+    <table class="header-table">
+        <tr>
+            <td><b>IV NO.:</b> {{ iv_no }}</td>
+            <td><b>RV NO.:</b> {{ rv_no }}</td>
+        </tr>
+
+        <tr>
+            <td><b>DATE:</b> {{ date_iv }}</td>
+            <td><b>DATE:</b> {{ date_rv }}</td>
+        </tr>
+
+        <tr>
+            <td><b>UNIT:</b> {{ unit_iv }}</td>
+            <td><b>UNIT:</b> {{ unit_rv }}</td>
+        </tr>
+
+        <tr>
+            <td><b>PIN:</b> {{ pin_iv }}</td>
+            <td><b>PIN:</b> {{ pin_rv }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Station:</b> {{ station_iv }}</td>
+            <td><b>Station:</b> {{ station_rv }}</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <!-- TEXT BLOCK -->
+    <div class="section-text">
+        Items enumerated below has been issued to : <b>{{ issued_to }}</b><br><br>
+        In compliance with : {{ compliance }}<br><br>
+        Authority of : {{ authority }}
+    </div>
+
+    <!-- ITEMS TABLE -->
+    <table>
+        <tr>
+            <th style="width:5%">S.No</th>
+            <th style="width:20%">Type of Veh</th>
+            <th style="width:50%">BA No.</th>
+            <th style="width:15%">A/U</th>
+            <th style="width:10%">Qty</th>
+            <th style="width:10%">Remarks</th>
+        </tr>
+
+        {% for item in items %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ item.vehicle_type }}</td>
+            <td>{{ item.ba_no }}</td>
+            <td>{{ item.au }}</td>
+            <td>{{ item.qty }}</td>
+            <td>{{ item.remarks }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    <br>
+
+    <p>Please sign and return one copy to this unit duly receipted</p>
+
+    <!-- SIGNATURE TABLE -->
+    <table>
+        <tr>
+            <th style="width:25%">Issued_by</th>
+            <th style="width:25%">Handed_over_by</th>
+            <th style="width:25%">Taken_over_by</th>
+            <th style="width:25%">Received_by</th>
+        </tr>
+
+        <tr>
+            <td>{{ issued_by }}</td>
+            <td>{{ handed_over }}</td>
+            <td>{{ taken_over }}</td>
+            <td>{{ received_by }}</td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

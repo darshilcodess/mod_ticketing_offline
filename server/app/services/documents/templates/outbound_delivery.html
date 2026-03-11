@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 15mm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+        }
+
+        .heading {
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .subheading {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .box {
+            border: 1px solid #bbb;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        .header-table td {
+            border: none;
+            padding: 3px 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 4px;
+            font-size: 10px;
+        }
+
+        th {
+            background-color: #f3f3f3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- BOX 1 -->
+    <div class="box">
+
+        <table class="header-table">
+            <tr>
+                <td><b>Shipment No:</b> {{ shipment_no }}</td>
+                <td><b>Date:</b> {{ shipment_date }}</td>
+            </tr>
+        </table>
+
+        <div class="heading">OUTBOUND DELIVERY</div>
+        <div class="subheading">CLASS {{ class_name }}</div>
+
+    </div>
+
+    <!-- BOX 2 -->
+    <div class="box">
+
+        <table class="header-table">
+
+            <tr>
+                <td><b>OBD NUMBER:</b> {{ obd_from }} TO {{ obd_to }}</td>
+                <td><b>OBD CREATION DATE:</b> {{ obd_creation_date }}</td>
+            </tr>
+
+            <tr>
+                <td><b>STR NO:</b> {{ str_no }}</td>
+                <td><b>TRACKING NUMBER:</b> {{ tracking_number }}</td>
+            </tr>
+
+            <tr>
+                <td><b>STR DATE:</b> {{ str_date }}</td>
+                <td><b>STO NO:</b> {{ sto_no }}</td>
+            </tr>
+
+            <tr>
+                <td><b>PRIORITY:</b> {{ priority }}</td>
+                <td><b>TYPE OF STR:</b> {{ type_of_str }}</td>
+            </tr>
+
+            <tr>
+                <td><b>AUTHORITY:</b> {{ authority }}</td>
+                <td><b>FROM:</b> {{ from_location }}</td>
+            </tr>
+
+            <tr>
+                <td><b>TO:</b> {{ to_location }}</td>
+                <td><b>SUS NO:</b> {{ sus_no }}</td>
+            </tr>
+
+            <tr>
+                <td><b>IBD NUMBER:</b> {{ ibd_number }}</td>
+                <td></td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <!-- TABLE -->
+    <table>
+
+        <tr>
+            <th style="width:10%">Cos Section</th>
+            <th style="width:10%">Part Number</th>
+            <th style="width:10%">SAP Number</th>
+            <th style="width:10%">Material Description</th>
+            <th style="width:10%">Batch no.</th>
+            <th style="width:10%">Serial No.</th>
+            <th style="width:10%">AU</th>
+            <th style="width:10%">Demand Qty</th>
+            <th style="width:10%">OBD Qty</th>
+            <th style="width:10%">Sub Depot</th>
+        </tr>
+
+        {% for item in items %}
+        <tr>
+            <td>{{ item.cos_section }}</td>
+            <td>{{ item.part_number }}</td>
+            <td>{{ item.sap_number }}</td>
+            <td>{{ item.material_description }}</td>
+            <td>{{ item.batch_no }}</td>
+            <td>{{ item.serial_no }}</td>
+            <td>{{ item.au }}</td>
+            <td>{{ item.demand_qty }}</td>
+            <td>{{ item.obd_qty }}</td>
+            <td>{{ item.sub_depot }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</body>
+
+</html>

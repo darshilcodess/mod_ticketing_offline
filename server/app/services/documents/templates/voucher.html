@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 6px;
+            font-size: 12px;
+        }
+
+        .header td {
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>RECEIPT, ISSUE AND EXPENSE VOUCHER</h2>
+
+    <table class="header">
+        <tr>
+            <td>IV NO: {{ iv_no }}</td>
+            <td>RV NO: {{ rv_no }}</td>
+        </tr>
+        <tr>
+            <td>UNIT: {{ unit_iv }}</td>
+            <td>UNIT: {{ unit_rv }}</td>
+        </tr>
+        <tr>
+            <td>STN: {{ stn_iv }}</td>
+            <td>STN: {{ stn_rv }}</td>
+        </tr>
+        <tr>
+            <td>DATE: {{ date_iv }}</td>
+            <td>DATE: {{ date_rv }}</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <p><b>Issued to:</b> {{ issued_to }}</p>
+    <p><b>In compliance with:</b> {{ compliance }}</p>
+    <p><b>Auth:</b> {{ auth }}</p>
+
+    <table>
+        <tr>
+            <th>S.No</th>
+            <th>Part</th>
+            <th>Nomenclature</th>
+            <th>Total</th>
+            <th>Remarks</th>
+        </tr>
+
+        {% for item in items %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ item.part_no }}</td>
+            <td>{{ item.nomenclature }}</td>
+            <td>{{ item.total }}</td>
+            <td>{{ item.remarks }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p>(Total items {{ items|length }} only)</p>
+
+</body>
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .header-table td {
+            border: none;
+            padding: 3px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        hr {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>RECEIPT, ISSUE AND EXPENSE VOUCHER</h2>
+
+    <!-- HEADER -->
+    <table class="header-table">
+        <tr>
+            <td>IV NO.: {{ iv_no }}</td>
+            <td>RV NO.: {{ rv_no }}</td>
+        </tr>
+        <tr>
+            <td>UNIT: {{ unit_iv }}</td>
+            <td>UNIT: {{ unit_rv }}</td>
+        </tr>
+        <tr>
+            <td>STN: {{ stn_iv }}</td>
+            <td>STN: {{ stn_rv }}</td>
+        </tr>
+        <tr>
+            <td>DATE: {{ date_iv }}</td>
+            <td>DATE: {{ date_rv }}</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <p><b>Issued to:</b> {{ issued_to }}</p>
+    <p><b>In compliance with:</b> {{ compliance }}</p>
+    <p><b>Auth:</b> {{ auth }}</p>
+
+    <!-- ITEMS TABLE -->
+    <table>
+        <tr>
+            <th style="width:8%">S.No</th>
+            <th style="width:16%">Cart Part No.</th>
+            <th style="width:36%">Nomenclature</th>
+            <th style="width:8%">HQ</th>
+            <th style="width:8%">P</th>
+            <th style="width:8%">Q</th>
+            <th style="width:16%">Total</th>
+        </tr>
+
+        {% for item in items %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ item.part_no }}</td>
+            <td>{{ item.nomenclature }}</td>
+            <td>{{ item.hq }}</td>
+            <td>{{ item.p }}</td>
+            <td>{{ item.q }}</td>
+            <td>{{ item.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p>(Total items {{ items|length }} only)</p>
+
+    <p>Please sign and return one copy to this unit duly receipted</p>
+
+    <!-- SIGNATURE TABLE -->
+    <table>
+        <tr>
+            <th style="width:25%">Issued_by</th>
+            <th style="width:25%">Handed_over_by</th>
+            <th style="width:25%">Taken_over_by</th>
+            <th style="width:25%">Received_by</th>
+        </tr>
+        <tr>
+            <td>{{ issued_by }}</td>
+            <td>{{ handed_over }}</td>
+            <td>{{ taken_over }}</td>
+            <td>{{ received_by }}</td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

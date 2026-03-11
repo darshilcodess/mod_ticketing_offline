@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        .heading {
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .box {
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .header-table td {
+            border: none;
+            padding: 4px 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            font-size: 11px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .label {
+            font-weight: bold;
+            width: 150px;
+        }
+
+        .notes {
+            margin-top: 5px;
+            min-height: 40px;
+            border: 1px solid #ccc;
+            padding: 8px;
+            background: #fafafa;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="heading">Issue Completion Certificate</div>
+
+    <!-- BOX 1: General Info -->
+    <div class="box">
+        <table class="header-table">
+            <tr>
+                <td class="label">TICKET ID:</td>
+                <td>#{{ ticket_id }}</td>
+                <td class="label">CLOSURE DATE:</td>
+                <td>{{ closed_at[:10] }}</td>
+            </tr>
+            <tr>
+                <td class="label">TITLE:</td>
+                <td colspan="3">{{ title }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- BOX 2: Status Summary -->
+    <div class="box">
+        <table class="header-table">
+            <tr>
+                <td class="label">CREATED BY:</td>
+                <td>{{ created_by }}</td>
+                <td class="label">CREATED AT:</td>
+                <td>{{ created_at[:10] }}</td>
+            </tr>
+            <tr>
+                <td class="label">RESOLVED BY:</td>
+                <td>{{ resolved_by or 'N/A' }}</td>
+                <td class="label">STATUS:</td>
+                <td>CLOSED / COMPLETED</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Description -->
+    <p><b>Description:</b> {{ description }}</p>
+
+    <!-- Resolution Notes -->
+    <p><b>Resolution Notes:</b></p>
+    <div class="notes">
+        {{ resolution_notes or 'No specific resolution notes provided.' }}
+    </div>
+
+    <br>
+
+    <!-- BOX 3: History Table -->
+    <div class="heading" style="font-size: 14px; margin-top: 20px;">TICKET HISTORY</div>
+    <table>
+        <tr>
+            <th style="width: 25%">Date & Time</th>
+            <th style="width: 20%">Event</th>
+            <th style="width: 20%">Actor</th>
+            <th>Notes / Details</th>
+        </tr>
+        {% for log in history %}
+        <tr>
+            <td>{{ log.timestamp[:19].replace('T', ' ') }}</td>
+            <td><b>{{ log.event }}</b></td>
+            <td>{{ log.actor }}<br><small>({{ log.role }})</small></td>
+            <td>
+                {{ log.notes or '' }}
+                {% if log.team_name %}
+                Allocated to: {{ log.team_name }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="footer">
+        <hr>
+        <p>Generated on {{ closed_at }} | MOD Ticketing System Official Record</p>
+        <p>This is a system-generated document and is end-to-end encrypted.</p>
+    </div>
+
+</body>
+
+</html>
